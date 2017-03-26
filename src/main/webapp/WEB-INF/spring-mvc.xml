@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <mvc:annotation-driven/>
+    <!-- 激活在bean中定义的各种注解，@Transactional注解除外，它需要tx:annotation-driven激活  -->
+    <context:annotation-config />
+    <!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入  -->
+    <context:component-scan base-package="com" />
+    <!-- 在spring中对aspectj支持 -->
+    <aop:aspectj-autoproxy/>
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/public/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    <!-- 设置请求映射编码，解决@ResponseBody乱码问题 -->
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean
+                        class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <constructor-arg>
+                        <bean id="defaultCharset" class="java.nio.charset.Charset"
+                              factory-method="forName">
+                            <constructor-arg value="UTF-8" />
+                        </bean>
+                    </constructor-arg>
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <bean class="org.springframework.http.MediaType">
+                                <constructor-arg index="0" value="text" />
+                                <constructor-arg index="1" value="plain" />
+                                <constructor-arg index="2" value="UTF-8" />
+                            </bean>
+                            <bean class="org.springframework.http.MediaType">
+                                <constructor-arg index="0" value="application" />
+                                <constructor-arg index="1" value="json" />
+                                <constructor-arg index="2" value="UTF-8" />
+                            </bean>
+                        </list>
+
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+</head>
+<body>
+	<button class="test">测试</button>
+</body>
+<script type="text/javascript">
+	function postAjax(url, data) {
+		$.ajax({
+			url: url,
+			type: 'POST',
+			dataType: 'json',
+			data: data,
+			xhrFields: {
+				withCredentials: true
+			}
+		})
+		.done(function(rel) {
+			console.log(rel);
+		})
+		.fail(function() {
+			console.log(data);
+			console.log("error");
+		});
+	}
+
+	function getAjax(url) {
+		$.ajax({
+			url: url,
+			type: 'GET',
+		})
+		.done(function(rel) {
+			console.log(rel);
+		})
+		.fail(function() {
+			console.log("error");
+		});
+	}
+
+	$('.test').on('click', function () {
+		postAjax('http://120.25.240.91/wechatEE/web/user/login',
+			{userName: 'zengqin', password: '888888'});
+	})
+</script>
+</html>
